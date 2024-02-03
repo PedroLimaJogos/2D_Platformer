@@ -13,6 +13,10 @@ public class Player : MonoBehaviour
     public float jumpForce = 2;
 
     public float speed;
+    public float speedRun;
+
+
+    private float _currentSpeed;
     private void Update()
     {
         handleJump();
@@ -21,15 +25,20 @@ public class Player : MonoBehaviour
 
     private void handleMovement()
     {
+        if (Input.GetKey(KeyCode.LeftControl))
+            _currentSpeed = speedRun;
+        else
+            _currentSpeed = speed;
+
         if (Input.GetKey(KeyCode.RightArrow))
         {
             //myRigidBody.MovePosition(myRigidBody.position + velocity * Time.deltaTime);
-            myRigidBody.velocity = new UnityEngine.Vector2(speed, myRigidBody.velocity.y);
+            myRigidBody.velocity = new UnityEngine.Vector2(_currentSpeed, myRigidBody.velocity.y);
         }
         else if (Input.GetKey(KeyCode.LeftArrow))
         {
             //myRigidBody.MovePosition(myRigidBody.position - velocity * Time.deltaTime);
-            myRigidBody.velocity = new UnityEngine.Vector2(-speed, myRigidBody.velocity.y);
+            myRigidBody.velocity = new UnityEngine.Vector2(-_currentSpeed, myRigidBody.velocity.y);
         }
 
         if (myRigidBody.velocity.x > 0)
