@@ -24,6 +24,10 @@ public class Player : MonoBehaviour
 
     public Ease ease = Ease.OutBack;
 
+    [Header("Animation Setup")]
+    public string boolRun = "Run";
+    public Animator animator;
+
 
     private void Update()
     {
@@ -42,11 +46,26 @@ public class Player : MonoBehaviour
         {
             //myRigidBody.MovePosition(myRigidBody.position + velocity * Time.deltaTime);
             myRigidBody.velocity = new UnityEngine.Vector2(_currentSpeed, myRigidBody.velocity.y);
+            if (myRigidBody.transform.localScale.x != 1)
+            {
+                myRigidBody.transform.DOScaleX(1, .1f);
+            }
+            animator.SetBool(boolRun, true);
         }
         else if (Input.GetKey(KeyCode.LeftArrow))
         {
             //myRigidBody.MovePosition(myRigidBody.position - velocity * Time.deltaTime);
             myRigidBody.velocity = new UnityEngine.Vector2(-_currentSpeed, myRigidBody.velocity.y);
+            if (myRigidBody.transform.localScale.x != -1)
+            {
+                myRigidBody.transform.DOScaleX(-1, .1f);
+            }
+
+            animator.SetBool(boolRun, true);
+        }
+        else
+        {
+            animator.SetBool(boolRun, false);
         }
 
         if (myRigidBody.velocity.x > 0)
