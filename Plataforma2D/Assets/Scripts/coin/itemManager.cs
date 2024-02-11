@@ -37,6 +37,7 @@ public class itemManager : MonoBehaviour
 
     private void UpdateUI()
     {
-        uiTextCoins.text = coins.ToString();
+        //uiTextCoins.text = coins.ToString();
+        UIGameManager.UpdateTextCoins(coins.ToString());
     }
 }
