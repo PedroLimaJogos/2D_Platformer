@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
 {
     // Update is called once per frame
     public Rigidbody2D myRigidBody;
+    public HealthBase healthBase;
 
     public UnityEngine.Vector2 friction = new UnityEngine.Vector2(.1f, 0);
 
@@ -26,8 +27,25 @@ public class Player : MonoBehaviour
 
     [Header("Animation Setup")]
     public string boolRun = "Run";
+    public string triggerDeath = "Death";
     public Animator animator;
 
+
+    private void Awake()
+    {
+        if (healthBase != null)
+        {
+            healthBase.Onkill += onPlayerKill;
+        }
+
+    }
+
+    private void onPlayerKill()
+    {
+        healthBase.Onkill -= onPlayerKill;
+        animator.SetTrigger(triggerDeath);
+
+    }
 
     private void Update()
     {
@@ -94,5 +112,10 @@ public class Player : MonoBehaviour
     {
         myRigidBody.transform.DOScaleY(jumpScaleY, animationDuration).SetLoops(2, LoopType.Yoyo).SetEase(ease);
         myRigidBody.transform.DOScaleX(jumpScaleX, animationDuration).SetLoops(2, LoopType.Yoyo).SetEase(ease);
+    }
+
+    public void DestroyMe()
+    {
+        Destroy(gameObject);
     }
 }

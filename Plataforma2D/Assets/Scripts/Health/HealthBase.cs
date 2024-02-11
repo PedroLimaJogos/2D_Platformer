@@ -1,15 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class HealthBase : MonoBehaviour
 {
+
+    public Action Onkill;
     // Start is called before the first frame update
     public int startLife = 10;
     private int _currentLife;
     public bool destroyOnKill = false;
     public float delayToKill = 0f;
     private bool _isDead = false;
+
+    [SerializeField] private FlashColor _flashColor;
 
     private void Init()
     {
@@ -20,6 +25,10 @@ public class HealthBase : MonoBehaviour
     private void Awake()
     {
         Init();
+        if (_flashColor == null)
+        {
+            _flashColor = GetComponent<FlashColor>();
+        }
     }
     public void Damage(int damage)
     {
@@ -32,6 +41,11 @@ public class HealthBase : MonoBehaviour
         {
             Kill();
         }
+
+        if (_flashColor != null)
+        {
+            _flashColor.Flash();
+        }
     }
 
     // Update is called once per frame
@@ -40,6 +54,11 @@ public class HealthBase : MonoBehaviour
         _isDead = true;
 
         if (destroyOnKill)
+        {
             Destroy(gameObject, delayToKill);
+        }
+        Onkill?.Invoke();
     }
+
+
 }
