@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 public class itemManager : MonoBehaviour
 {
     public static itemManager Instance;
+    public TextMeshProUGUI uiTextCoins;
     public int coins;
     private void Awake()
     {
@@ -23,10 +26,17 @@ public class itemManager : MonoBehaviour
     private void Reset()
     {
         coins = 0;
+        UpdateUI();
     }
 
     public void AddCoins(int amount = 1)
     {
         coins += amount;
+        UpdateUI();
+    }
+
+    private void UpdateUI()
+    {
+        uiTextCoins.text = coins.ToString();
     }
 }
