@@ -12,23 +12,12 @@ public class Player : MonoBehaviour
 
     public UnityEngine.Vector2 friction = new UnityEngine.Vector2(.1f, 0);
 
-    [Header("Speed Setup")]
-    public float jumpForce = 2;
-    public float speed;
-    public float speedRun;
-    private float _currentSpeed;
+    [Header("Setup")]
+    public SOplayer SOPlayerSetup;
 
-    [Header("Animation Setup")]
-    public float jumpScaleY = 1.5f;
-    public float jumpScaleX = 0.7f;
-    public float animationDuration = .3f;
 
-    public Ease ease = Ease.OutBack;
-
-    [Header("Animation Setup")]
-    public string boolRun = "Run";
-    public string triggerDeath = "Death";
     public Animator animator;
+    public float _currentSpeed;
 
 
     private void Awake()
@@ -43,7 +32,7 @@ public class Player : MonoBehaviour
     private void onPlayerKill()
     {
         healthBase.Onkill -= onPlayerKill;
-        animator.SetTrigger(triggerDeath);
+        animator.SetTrigger(SOPlayerSetup.triggerDeath);
 
     }
 
@@ -56,9 +45,9 @@ public class Player : MonoBehaviour
     private void handleMovement()
     {
         if (Input.GetKey(KeyCode.LeftControl))
-            _currentSpeed = speedRun;
+            _currentSpeed = SOPlayerSetup.speedRun;
         else
-            _currentSpeed = speed;
+            _currentSpeed = SOPlayerSetup.speed;
 
         if (Input.GetKey(KeyCode.RightArrow))
         {
@@ -68,7 +57,7 @@ public class Player : MonoBehaviour
             {
                 myRigidBody.transform.DOScaleX(1, .1f);
             }
-            animator.SetBool(boolRun, true);
+            animator.SetBool(SOPlayerSetup.boolRun, true);
         }
         else if (Input.GetKey(KeyCode.LeftArrow))
         {
@@ -79,11 +68,11 @@ public class Player : MonoBehaviour
                 myRigidBody.transform.DOScaleX(-1, .1f);
             }
 
-            animator.SetBool(boolRun, true);
+            animator.SetBool(SOPlayerSetup.boolRun, true);
         }
         else
         {
-            animator.SetBool(boolRun, false);
+            animator.SetBool(SOPlayerSetup.boolRun, false);
         }
 
         if (myRigidBody.velocity.x > 0)
@@ -100,7 +89,7 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            myRigidBody.velocity = UnityEngine.Vector2.up * jumpForce;
+            myRigidBody.velocity = UnityEngine.Vector2.up * SOPlayerSetup.jumpForce;
             myRigidBody.transform.localScale = UnityEngine.Vector2.one;
 
             DOTween.Kill(myRigidBody.transform);
@@ -110,8 +99,8 @@ public class Player : MonoBehaviour
 
     private void handleScaleJump()
     {
-        myRigidBody.transform.DOScaleY(jumpScaleY, animationDuration).SetLoops(2, LoopType.Yoyo).SetEase(ease);
-        myRigidBody.transform.DOScaleX(jumpScaleX, animationDuration).SetLoops(2, LoopType.Yoyo).SetEase(ease);
+        myRigidBody.transform.DOScaleY(SOPlayerSetup.jumpScaleY, SOPlayerSetup.animationDuration).SetLoops(2, LoopType.Yoyo).SetEase(SOPlayerSetup.ease);
+        myRigidBody.transform.DOScaleX(SOPlayerSetup.jumpScaleX, SOPlayerSetup.animationDuration).SetLoops(2, LoopType.Yoyo).SetEase(SOPlayerSetup.ease);
     }
 
     public void DestroyMe()

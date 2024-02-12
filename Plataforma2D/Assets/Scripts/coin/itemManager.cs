@@ -5,9 +5,10 @@ using UnityEngine.UI;
 using TMPro;
 public class itemManager : MonoBehaviour
 {
+    public SOint coins;
     public static itemManager Instance;
     public TextMeshProUGUI uiTextCoins;
-    public int coins;
+    //public int coins;
     private void Awake()
     {
         if (Instance == null)
@@ -25,19 +26,19 @@ public class itemManager : MonoBehaviour
     // Update is called once per frame
     private void Reset()
     {
-        coins = 0;
+        coins.value = 0;
         UpdateUI();
     }
 
     public void AddCoins(int amount = 1)
     {
-        coins += amount;
+        coins.value += amount;
         UpdateUI();
     }
 
     private void UpdateUI()
     {
         //uiTextCoins.text = coins.ToString();
-        UIGameManager.UpdateTextCoins(coins.ToString());
+        //UIGameManager.UpdateTextCoins(coins.value.ToString());
     }
 }
