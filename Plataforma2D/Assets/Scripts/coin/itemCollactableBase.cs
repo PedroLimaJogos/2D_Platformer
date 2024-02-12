@@ -6,6 +6,14 @@ public class itemCollactableBase : MonoBehaviour
 {
     // Start is called before the first frame update
     public string tagCompare = "player";
+    public ParticleSystem particleSystem;
+    public float timeToHide = 3f;
+    public GameObject graphicItem;
+
+    private void Awake()
+    {
+        //if (particleSystem != null) particleSystem.transform.SetParent(null);
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -17,13 +25,20 @@ public class itemCollactableBase : MonoBehaviour
     }
     protected virtual void Collect()
     {
-        Debug.Log("collect");
+        if (graphicItem != null) graphicItem.SetActive(false);
+        Invoke(nameof(HideObject), timeToHide);
         OnCollect();
-        gameObject.SetActive(false);
     }
-    protected virtual void OnCollect()
+
+    private void HideObject()
     {
 
+        gameObject.SetActive(false);
+    }
+
+    protected virtual void OnCollect()
+    {
+        if (particleSystem != null) particleSystem.Play();
     }
 
     private void Update()

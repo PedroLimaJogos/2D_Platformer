@@ -14,11 +14,16 @@ public class Player : MonoBehaviour
 
     [Header("Setup")]
     public SOplayer SOPlayerSetup;
+    public ParticleSystem JumpVFX;
 
 
     public Animator animator;
     public float _currentSpeed;
 
+    [Header("Jump Collision Check")]
+    public Collider2D collider2D;
+    public float disToGround;
+    public float spaceToGround = .1f;
 
     private void Awake()
     {
@@ -27,6 +32,16 @@ public class Player : MonoBehaviour
             healthBase.Onkill += onPlayerKill;
         }
 
+        if (collider2D != null)
+        {
+            disToGround = collider2D.bounds.extents.y;
+        }
+    }
+
+    private bool IsGrounded()
+    {
+        Debug.DrawRay(transform.position, -UnityEngine.Vector2.up, Color.magenta, disToGround + spaceToGround);
+        return Physics2D.Raycast(transform.position, -UnityEngine.Vector2.up, disToGround + spaceToGround);
     }
 
     private void onPlayerKill()
@@ -38,6 +53,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        IsGrounded();
         handleJump();
         handleMovement();
     }
@@ -87,13 +103,15 @@ public class Player : MonoBehaviour
 
     private void handleJump()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
         {
             myRigidBody.velocity = UnityEngine.Vector2.up * SOPlayerSetup.jumpForce;
             myRigidBody.transform.localScale = UnityEngine.Vector2.one;
 
             DOTween.Kill(myRigidBody.transform);
             handleScaleJump();
+
+            PlayJumpVFX();
         }
     }
 
@@ -101,6 +119,11 @@ public class Player : MonoBehaviour
     {
         myRigidBody.transform.DOScaleY(SOPlayerSetup.jumpScaleY, SOPlayerSetup.animationDuration).SetLoops(2, LoopType.Yoyo).SetEase(SOPlayerSetup.ease);
         myRigidBody.transform.DOScaleX(SOPlayerSetup.jumpScaleX, SOPlayerSetup.animationDuration).SetLoops(2, LoopType.Yoyo).SetEase(SOPlayerSetup.ease);
+    }
+
+    private void PlayJumpVFX()
+    {
+        if (JumpVFX != null) JumpVFX.Play();
     }
 
     public void DestroyMe()
