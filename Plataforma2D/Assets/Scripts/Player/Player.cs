@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     [Header("Setup")]
     public SOplayer SOPlayerSetup;
     public ParticleSystem JumpVFX;
+    public AudioSource audioSource;
 
 
     public Animator animator;
@@ -124,6 +125,7 @@ public class Player : MonoBehaviour
     private void PlayJumpVFX()
     {
         if (JumpVFX != null) JumpVFX.Play();
+        if (audioSource) audioSource.Play();
     }
 
     public void DestroyMe()
